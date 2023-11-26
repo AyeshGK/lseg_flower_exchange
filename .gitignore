@@ -24,3 +24,6 @@ bin/
 
 # Dependency directories
 vendor/
+
+# remove DS_Store
+.DS_Store

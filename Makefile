@@ -2,28 +2,36 @@
 SRC_DIR = src
 INCLUDE_DIR = include
 BUILD_DIR = build
+DATA_DIR = data
 
 # Compiler flags for C++
 CXXFLAGS = -std=c++11 -Wall
 
+# Source files
+SRCS = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/DAO/*.cpp) $(wildcard $(SRC_DIR)/service/*.cpp)
+
+# Header files
+INCLUDES = -I$(INCLUDE_DIR)
+
+# Object files
+OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
+
 # Targets
 all: $(BUILD_DIR)/final
 
-$(BUILD_DIR)/final: $(BUILD_DIR)/main.o $(BUILD_DIR)/hello.o
+$(BUILD_DIR)/final: $(OBJS)
 	@echo "Linking and producing executable..."
 	g++ $(CXXFLAGS) -o $@ $^
 
-$(BUILD_DIR)/main.o: $(SRC_DIR)/main.cpp
-	@echo "Compiling main.cpp..."
-	g++ $(CXXFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
-
-$(BUILD_DIR)/hello.o: $(SRC_DIR)/hello.cpp
-	@echo "Compiling hello.cpp..."
-	g++ $(CXXFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
+# Create necessary directories before compiling
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(dir $@)
+	@echo "Compiling $<..."
+	g++ $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
 	@echo "Cleaning up..."
-	rm -f $(BUILD_DIR)/*.o $(BUILD_DIR)/final
+	rm -rf $(BUILD_DIR)/*.o $(BUILD_DIR)/final
 
 .PHONY: all clean
 
