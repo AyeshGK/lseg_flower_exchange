@@ -3,15 +3,17 @@
 
 #include <vector>
 #include "Order.h"
+#include <memory>
+
 
 class CSVReader {
 public:
     CSVReader(const std::string& filename);
 
-    std::vector<Order> readCSV();
+    std::vector<OrderPtr> readCSV();
 
 private:
-    Order parseCSVLine(const std::string& line);
+    OrderPtr parseCSVLine(const std::string& line);
 
     std::string filename;
 };

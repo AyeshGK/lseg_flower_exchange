@@ -8,7 +8,7 @@ DATA_DIR = data
 CXXFLAGS = -std=c++11 -Wall
 
 # Source files
-SRCS = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/DAO/*.cpp) $(wildcard $(SRC_DIR)/service/*.cpp)
+SRCS = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/DAO/*.cpp) $(wildcard $(SRC_DIR)/service/*.cpp) $(wildcard $(SRC_DIR)/model/*.cpp) $(wildcard $(SRC_DIR)/FlowerFactory/*.cpp)
 
 # Header files
 INCLUDES = -I$(INCLUDE_DIR)
