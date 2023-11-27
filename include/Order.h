@@ -37,11 +37,20 @@ public:
     void setPrice(double price);
     void setTraderId(const std::string& traderId);
 
+    void resetQuantity(int quantity);
+    void setStatus(int status);
+
 
     // declare string setters 
     void setSide(const std::string& side);
     void setQuantity(const std::string& quantity);
     void setPrice(const std::string& price);
+
+    // operator overloading for priority queue 
+     // Comparison operators for sorting
+    bool operator>(const Order& rhs) const; // For descending order (buy side)
+    bool operator<(const Order& rhs) const; // For ascending order (sell side)
+
 
 private:
     std::string clientOrderId;

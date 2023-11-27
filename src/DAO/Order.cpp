@@ -2,6 +2,7 @@
 
 
 #include "../../include/Order.h"
+#include "Order.h"
 
  
 Order::Order(
@@ -93,7 +94,7 @@ void Order::setClientOrderId(const std::string& clientOrderId) {
 
 
 void Order::setInstrument(const std::string& instrument) {
-    std:: cout << "instrument: " << instrument << std::endl;
+    // std:: cout << "instrument: " << instrument << std::endl;
     // Rule: Instrument should be one of {Rose, Lavender, Lotus, Tulip, Orchid}
     this->instrument = instrument;
     // Check if the provided instrument is not empty
@@ -161,6 +162,10 @@ void Order::setQuantity(int quantity) {
     // std:: cout << "quantity: " << quantity << std::endl;
 }
 
+void Order::resetQuantity(int quantity){
+    this->quantity = quantity;
+}
+
 void Order::setPrice(const std::string& price) {
     try {
         double priceDouble = std::stod(price);
@@ -173,7 +178,7 @@ void Order::setPrice(const std::string& price) {
 }
 
 void Order::setPrice(double price) {
-    std:: cout << "price: " << price << std::endl;
+    // std:: cout << "price: " << price << std::endl;
     // Rule: Price should be a positive double
     this->price = price;
     if(price < 0) {
@@ -184,6 +189,25 @@ void Order::setPrice(double price) {
 
 void Order::setTraderId(const std::string& traderId) {
     this->traderId = traderId;
+}
+
+void Order::setStatus(int status)
+{
+    this->status = status;
+}
+
+// Implementation of the greater-than operator (for descending order)
+bool Order::operator>(const Order& rhs) const {
+    // For the buy side, higher price is more attractive
+    std::cout << "> side" << std::endl;
+    return getPrice() > rhs.getPrice();
+}
+
+// Implementation of the less-than operator (for ascending order)
+bool Order::operator<(const Order& rhs) const {
+    // For the sell side, lower price is more attractive
+    std::cout << "< side" << std::endl;
+    return getPrice() < rhs.getPrice();
 }
 
 

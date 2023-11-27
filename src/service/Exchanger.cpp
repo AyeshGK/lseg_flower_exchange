@@ -22,18 +22,43 @@ void Exchanger::performExchange() {
 
     // Example: Performing the exchange (replace with actual exchange logic)
     // This is where you would implement the order matching and execution logic.
-    std::cout << "Performing order exchange...\n";
     std::cout << "Orders before exchange:\n";
-
     // Example: Performing the exchange using the FlowerBookFactory (replace with actual logic)
     for (const auto& order : orders) {
+        if(order->getStatus() == 1){
+            std::cout <<"Rejected order: \n";
+            std::cout << "Client Order ID: " << order->getClientOrderId() << "\n";
+            std::cout << "Instrument: " << order->getInstrument() << "\n";
+            std::cout << "Side: " << order->getSide() << "\n";
+            std::cout << "Quantity: " << order->getQuantity() << "\n";
+            std::cout << "Price: " << order->getPrice() << "\n";
+            std::cout << "Trader ID: " << order->getTraderId() << "\n\n";
+
+            continue;
+        }
+
         // Get or create a flower book for the instrument type
         std::shared_ptr<Book> flowerBook = flowerBookFactory.getFlowerBook(order->getInstrument());
-        flowerBook->addOrder(order);
+        std::vector<OrderPtr> execution = flowerBook->match(order);
+        if(execution.empty()) {
+    // No execution, continue with the next iteration
+        
+    continue;
+}
+std::cout << "report working:\n";
+        for(const auto& orderPtr : execution){
+            std::cout <<"Executed order: \n";
+            std::cout << "Client Order ID: " << orderPtr->getClientOrderId() << "\n";
+            std::cout << "Instrument: " << orderPtr->getInstrument() << "\n";
+            std::cout << "Side: " << orderPtr->getSide() << "\n";
+            std::cout << "Quantity: " << orderPtr->getQuantity() << "\n";
+            std::cout << "Price: " << orderPtr->getPrice() << "\n";
+            std::cout << "Trader ID: " << orderPtr->getTraderId() << "\n\n";
+        }
+
+        std::cout << "Orders after exchange:\n";
+
     }
 
-    // Display the orders after exchange
-    std::cout << "Orders after exchange:\n";
-    
 
 }
