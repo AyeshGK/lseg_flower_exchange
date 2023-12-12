@@ -29,9 +29,13 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo "Compiling $<..."
 	g++ $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
+# clean:
+# 	@echo "Cleaning up..."
+# 	rm -rf $(BUILD_DIR)/*.o $(BUILD_DIR)/final
+
 clean:
 	@echo "Cleaning up..."
-	rm -rf $(BUILD_DIR)/*.o $(BUILD_DIR)/final
+	rm -rf $(BUILD_DIR)/*
 
 .PHONY: all clean
 

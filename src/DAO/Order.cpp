@@ -197,19 +197,19 @@ void Order::setStatus(int status)
 }
 
 // Implementation of the greater-than operator (for descending order)
-bool Order::operator>(const Order& rhs) const {
-    // For the buy side, higher price is more attractive
-    std::cout << "> side" << std::endl;
-    std::cout << "current price :"<<getPrice()<<" , rsh price: "<<rhs.getPrice()<< std::endl;
-    return rhs.getPrice() > getPrice() ;
-}
+// bool Order::operator>(const Order& rhs) const {
+//     // For the buy side, higher price is more attractive
+//     std::cout << "> side" << std::endl;
+//     std::cout << "current price :"<<getPrice()<<" , rsh price: "<<rhs.getPrice()<< std::endl;
+//     return rhs.getPrice() > getPrice() ;
+// }
 
-// Implementation of the less-than operator (for ascending order)
-bool Order::operator<(const Order& rhs) const {
-    // For the sell side, lower price is more attractive
-    std::cout << "< side" << std::endl;
-    return rhs.getPrice() < getPrice();
-}
+// // Implementation of the less-than operator (for ascending order)
+// bool Order::operator<(const Order& rhs) const {
+//     // For the sell side, lower price is more attractive
+//     std::cout << "< side" << std::endl;
+//     return rhs.getPrice() < getPrice();
+// }
 
 
 // Path: src/DAO/Order.h

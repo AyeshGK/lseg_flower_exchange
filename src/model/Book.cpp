@@ -4,11 +4,12 @@
 // constructor
 
 
-void Book::addOrder(const OrderPtr& order) {
-    if (order->getSide() == 1) {
-        buyers.push(std::move(*order));
+void Book::addOrder(const OrderPtr& orderPtr) {
+    if (orderPtr->getSide() == 1) {
+        buyers.push(std::move(orderPtr));
+        
     } else {
-        sellers.push(std::move(*order));
+        sellers.push(std::move(orderPtr));
     }
 }
 
@@ -23,7 +24,8 @@ std::vector<OrderPtr> Book::sellersMatch(const OrderPtr& orderPtr) {
             std::cout<<"buyers not empty\n";
         
 
-            OrderPtr buyer = std::make_shared<Order>(buyers.top());
+            // OrderPtr buyer = std::make_shared<Order>(buyers.top());
+            OrderPtr buyer = buyers.top();
             std::cout<<"memory address: "<<&buyer<<"\n";
             std::cout<<"buyer price: "<<buyer->getPrice()<<"\n";
             int orderQuantity = quantity;
@@ -63,7 +65,7 @@ std::vector<OrderPtr> Book::sellersMatch(const OrderPtr& orderPtr) {
                     //execute seller order 
                     buyer->resetQuantity(buyerQuantity - quantity);
                     buyers.pop();
-                    buyers.push(*buyer); // pushing copy of buyer order
+                    buyers.push(buyer); // pushing copy of buyer order
                     
                     //update the transaction
                     buyer->resetQuantity(quantity);
@@ -88,14 +90,14 @@ std::vector<OrderPtr> Book::sellersMatch(const OrderPtr& orderPtr) {
         if(quantity == orderPtr->getQuantity()){
             std::cout << "no change"<< std::endl;
             OrderPtr orderCopyPtr = std::make_shared<Order>(*orderPtr);
-            sellers.push(std::move(*orderPtr)); // pushing original into sellers 
+            sellers.push(std::move(orderPtr)); // pushing original into sellers 
             execution.push_back(orderCopyPtr); // pushing copy object to execution array
         }else if(quantity >0){
             std::cout<<"partial transaction for seller finally\n";
             //partial transaction for seller
             std::cout << "quatity :" <<quantity << std::endl;
             orderPtr->resetQuantity(quantity);
-            sellers.push(std::move(*orderPtr)); // pushing without copy  
+            sellers.push(std::move(orderPtr)); // pushing without copy  
         }
     
         return execution;
@@ -112,7 +114,8 @@ std::vector<OrderPtr> Book::buyersMatch(const OrderPtr& orderPtr) {
 
     while(!sellers.empty()&& quantity >0){
         std::cout<<"sellers not empty\n";
-        OrderPtr seller = std::make_shared<Order>(sellers.top());
+        // OrderPtr seller = std::make_shared<Order>(sellers.top());
+        OrderPtr seller = sellers.top();
         std::cout<<"seller price: "<<seller->getPrice()<<"\n";
         int orderQuantity = quantity;
 
@@ -138,7 +141,7 @@ std::vector<OrderPtr> Book::buyersMatch(const OrderPtr& orderPtr) {
                 //execute buyer order 
                 seller->resetQuantity(sellerQuantity - quantity);
                 sellers.pop();
-                sellers.push(*seller); // pushing copy of seller order
+                sellers.push(seller); // pushing copy of seller order
                 
                 //update the transaction
                 seller->resetQuantity(quantity);
@@ -162,12 +165,12 @@ std::vector<OrderPtr> Book::buyersMatch(const OrderPtr& orderPtr) {
     if(quantity == orderPtr->getQuantity()){
         std::cout << "no change"<< std::endl;
         orderPtr->resetQuantity(quantity);
-        buyers.push(std::move(*orderPtr)); // pushing without copy
+        buyers.push(std::move(orderPtr)); // pushing without copy
         execution.push_back(orderPtr);
     }else if(quantity >0){
         //partial transaction for buyer
         orderPtr->resetQuantity(quantity);
-        buyers.push(std::move(*orderPtr)); // pushing without copy
+        buyers.push(std::move(orderPtr)); // pushing without copy
     }
 
     return execution;
@@ -191,9 +194,10 @@ std::vector<OrderPtr> Book::match(const OrderPtr& orderPtr) {
             //no sellers 
             std::cout<<"no sellers\n";
             OrderPtr orderCopyPtr = std::make_shared<Order>(*orderPtr);
-            buyers.push(std::move(*orderPtr)); // pushing without copy
+            buyers.push(std::move(orderPtr)); // pushing without copy
             execution.push_back(orderCopyPtr);
-        }else{
+        }
+        else{
              execution = buyersMatch(orderPtr);
         }
        
@@ -204,9 +208,10 @@ std::vector<OrderPtr> Book::match(const OrderPtr& orderPtr) {
             //no buyers 
             std::cout<<"no buyers\n";
             OrderPtr orderCopyPtr = std::make_shared<Order>(*orderPtr);
-            sellers.push(std::move(*orderPtr)); // pushing without copy
+            sellers.push(std::move(orderPtr)); // pushing without copy
             execution.push_back(orderCopyPtr);
-        }else{
+        }
+        else{
             execution = sellersMatch(orderPtr);
         }
     }
