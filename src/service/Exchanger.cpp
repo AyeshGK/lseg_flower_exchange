@@ -24,7 +24,13 @@ void Exchanger::performExchange() {
     // This is where you would implement the order matching and execution logic.
     std::cout << "Orders before exchange:\n";
     // Example: Performing the exchange using the FlowerBookFactory (replace with actual logic)
+    int count = 0;
+
+    std::cout << "orders size: " << orders.size() << "\n";
+
     for (const auto& order : orders) {
+        count++; 
+        std::cout << "Order " << count << ":\n";
         if(order->getStatus() == 1){
             std::cout <<"Rejected order: \n";
             std::cout << "Client Order ID: " << order->getClientOrderId() << "\n";
@@ -41,11 +47,11 @@ void Exchanger::performExchange() {
         std::shared_ptr<Book> flowerBook = flowerBookFactory.getFlowerBook(order->getInstrument());
         std::vector<OrderPtr> execution = flowerBook->match(order);
         if(execution.empty()) {
-    // No execution, continue with the next iteration
-        
-    continue;
-}
-std::cout << "report working:\n";
+            // No execution, continue with the next iteration
+            continue;
+        }
+
+        std::cout << "report working:=================================>\n";
         for(const auto& orderPtr : execution){
             std::cout <<"Executed order: \n";
             std::cout << "Client Order ID: " << orderPtr->getClientOrderId() << "\n";
@@ -57,8 +63,10 @@ std::cout << "report working:\n";
         }
 
         std::cout << "Orders after exchange:\n";
+        std::cout << "==============="<< std::endl;
 
     }
-
+    std::cout << "orders completed";
+    
 
 }

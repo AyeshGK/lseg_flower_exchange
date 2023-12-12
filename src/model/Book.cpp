@@ -21,14 +21,31 @@ std::vector<OrderPtr> Book::sellersMatch(const OrderPtr& orderPtr) {
     
         while(!buyers.empty()&& quantity >0){
             std::cout<<"buyers not empty\n";
+        
+
             OrderPtr buyer = std::make_shared<Order>(buyers.top());
+            std::cout<<"memory address: "<<&buyer<<"\n";
             std::cout<<"buyer price: "<<buyer->getPrice()<<"\n";
             int orderQuantity = quantity;
             if(buyer->getPrice() >= price){
                 
                 //execute order 
                 int buyerQuantity = buyer->getQuantity();
-                if(buyerQuantity <= quantity){
+
+                if(buyerQuantity == quantity){
+                    quantity =0 ;
+                    //complete transaction for seller
+                    std::cout<<"complete transaction for seller\n";
+                    buyer->setStatus(2);
+                    execution.push_back(buyer);
+                    buyers.pop();
+
+                    //complete transaction for buyer
+                    std::cout<<"complete transaction for buyer\n";
+                    orderPtr->setStatus(2);
+                    orderPtr->setPrice(buyer->getPrice()); // set to the buyer price
+                    execution.push_back(orderPtr);
+                }else if(buyerQuantity < quantity){
                     //execute buyer order 
                     quantity -= buyerQuantity;
                     buyer->setStatus(2);
@@ -63,15 +80,22 @@ std::vector<OrderPtr> Book::sellersMatch(const OrderPtr& orderPtr) {
                 }
     
             }else{
+                std::cout << "breaking ....."<< std::endl;
                 break;
             }
         }
-    
-        if(quantity >0){
+
+        if(quantity == orderPtr->getQuantity()){
+            std::cout << "no change"<< std::endl;
+            OrderPtr orderCopyPtr = std::make_shared<Order>(*orderPtr);
+            sellers.push(std::move(*orderPtr)); // pushing original into sellers 
+            execution.push_back(orderCopyPtr); // pushing copy object to execution array
+        }else if(quantity >0){
             std::cout<<"partial transaction for seller finally\n";
             //partial transaction for seller
+            std::cout << "quatity :" <<quantity << std::endl;
             orderPtr->resetQuantity(quantity);
-            sellers.push(std::move(*orderPtr)); // pushing without copy
+            sellers.push(std::move(*orderPtr)); // pushing without copy  
         }
     
         return execution;
@@ -91,6 +115,7 @@ std::vector<OrderPtr> Book::buyersMatch(const OrderPtr& orderPtr) {
         OrderPtr seller = std::make_shared<Order>(sellers.top());
         std::cout<<"seller price: "<<seller->getPrice()<<"\n";
         int orderQuantity = quantity;
+
         if(seller->getPrice() <= price){
             //execute order 
             std::cout<<"avaialble order\n";
@@ -134,7 +159,12 @@ std::vector<OrderPtr> Book::buyersMatch(const OrderPtr& orderPtr) {
         }
     }
 
-    if(quantity >0){
+    if(quantity == orderPtr->getQuantity()){
+        std::cout << "no change"<< std::endl;
+        orderPtr->resetQuantity(quantity);
+        buyers.push(std::move(*orderPtr)); // pushing without copy
+        execution.push_back(orderPtr);
+    }else if(quantity >0){
         //partial transaction for buyer
         orderPtr->resetQuantity(quantity);
         buyers.push(std::move(*orderPtr)); // pushing without copy
@@ -152,8 +182,11 @@ std::vector<OrderPtr> Book::match(const OrderPtr& orderPtr) {
     std::vector<OrderPtr> execution;
 
     int side = orderPtr->getSide();
+    std::cout << "order :"<<orderPtr->getClientOrderId()<<" price :"<<orderPtr->getPrice()<<" quantity :"<<orderPtr->getQuantity()<<" getSide :"<< orderPtr->getSide()<<std::endl;
     if(side == 1){
         //buy side 
+        std::cout<< "buy side yoyo"<<std::endl;
+        
         if(sellers.empty()){
             //no sellers 
             std::cout<<"no sellers\n";
@@ -166,6 +199,7 @@ std::vector<OrderPtr> Book::match(const OrderPtr& orderPtr) {
        
     }else{
         //sell side 
+      std::cout<< "sell side yoyo"<<std::endl;
         if(buyers.empty()){
             //no buyers 
             std::cout<<"no buyers\n";
@@ -176,6 +210,8 @@ std::vector<OrderPtr> Book::match(const OrderPtr& orderPtr) {
             execution = sellersMatch(orderPtr);
         }
     }
+
+    // std::cout<< "exit -- cout"<<std::endl;
 
     return execution;
 

@@ -1,4 +1,4 @@
 Client Order ID,Instrument,Side,Quantity,Price,Trader ID
-aa13,Rose,1,50,55.00,TR05
-aa15,Rose,1,50,45.00,TR03
-aa14,Rose,2,50,75.00,TR03
+aa13,Rose,1,40,55.00,TR05
+aa15,Rose,1,60,45.00,TR03
+aa14,Rose,2,50,35.00,TR03

@@ -17,8 +17,8 @@ public:
 
 private:
   // Priority queues for buyers and sellers
-    std::priority_queue<Order, std::vector<Order>, std::greater<Order>> sellers; // For sell side (ascending)
-    std::priority_queue<Order, std::vector<Order>> buyers; // For buy side (descending)
+    std::priority_queue<Order, std::vector<Order>, std::greater<Order>> buyers; // For sell side (ascending)
+    std::priority_queue<Order, std::vector<Order>> sellers; // For buy side (descending)
 
     std::vector<OrderPtr> buyersMatch(const OrderPtr& order);
     std::vector<OrderPtr> sellersMatch(const OrderPtr& order);
