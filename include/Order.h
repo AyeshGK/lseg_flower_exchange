@@ -19,6 +19,8 @@ public:
         const std::string& price,
         const std::string& traderId);
 
+
+
     // declare getters
     std::string getClientOrderId() const;
     std::string getInstrument() const;

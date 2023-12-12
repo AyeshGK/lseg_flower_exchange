@@ -28,6 +28,9 @@ std::vector<OrderPtr> CSVReader::readCSV() {
         OrderPtr orderPtr = parseCSVLine(line);
         orders.push_back(orderPtr);
     }
+
+    // push final order to buffer
+    orders.push_back(nullptr);
     
     file.close();
     return orders;

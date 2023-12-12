@@ -39,7 +39,11 @@ Order::Order(
     setPrice(price);
     setTraderId(traderId);
 
-} 
+}
+// Order::Order()
+// {
+//     setFinal();
+// }
 
 // getters
 std::string Order::getClientOrderId() const {
@@ -73,6 +77,11 @@ const std::string& Order::getReason() const {
 int Order::getStatus() const {
     return status;
 }
+
+// bool Order::getFinal() const
+// {
+//     return isFinal;
+// }
 
 // setters
 
@@ -211,5 +220,10 @@ void Order::setStatus(int status)
 //     return rhs.getPrice() < getPrice();
 // }
 
+
+// void Order::setFinal()
+// {
+//     this->isFinal = true;
+// }
 
 // Path: src/DAO/Order.h
