@@ -41,7 +41,9 @@ void CSVWriter::writeCSV() {
 
     if (!file.is_open()) {
         // Handle error opening file
-        throw std::runtime_error("Error opening file");
+        // throw std::runtime_error("Error opening file");
+        std::cerr << "Error: Unable to open file " << filename << std::endl;
+        return ;
     }
 
     // Write header

@@ -121,16 +121,34 @@ void Book::buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
 
     while(!sellers.empty()&& quantity >0){
         std::cout<<"sellers not empty\n";
+    
+
         // OrderPtr seller = std::make_shared<Order>(sellers.top());
         OrderPtr seller = sellers.top();
+        std::cout<<"memory address: "<<&seller<<"\n";
         std::cout<<"seller price: "<<seller->getPrice()<<"\n";
         int orderQuantity = quantity;
-
         if(seller->getPrice() <= price){
+            
             //execute order 
-            std::cout<<"avaialble order\n";
             int sellerQuantity = seller->getQuantity();
-            if(sellerQuantity <= quantity){
+
+            if(sellerQuantity == quantity){
+                quantity =0 ;
+                //complete transaction for buyer
+                std::cout<<"complete transaction for buyer\n";
+                seller->setStatus(2);
+                // execution.push_back(seller);
+                writerBuffer.addOrder(seller);
+                sellers.pop();
+
+                //complete transaction for seller
+                std::cout<<"complete transaction for seller\n";
+                orderPtr->setStatus(2);
+                orderPtr->setPrice(seller->getPrice()); // set to the seller price
+                // execution.push_back(orderPtr);
+                writerBuffer.addOrder(orderPtr);
+            }else if(sellerQuantity < quantity){
                 //execute seller order 
                 quantity -= sellerQuantity;
                 seller->setStatus(2);
@@ -169,18 +187,21 @@ void Book::buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
             }
 
         }else{
+            std::cout << "breaking ....."<< std::endl;
             break;
         }
     }
 
     if(quantity == orderPtr->getQuantity()){
         std::cout << "no change"<< std::endl;
-        orderPtr->resetQuantity(quantity);
-        buyers.push(std::move(orderPtr)); // pushing without copy
-        // execution.push_back(orderPtr);
-        writerBuffer.addOrder(orderPtr);
+        OrderPtr orderCopyPtr = std::make_shared<Order>(*orderPtr);
+        buyers.push(std::move(orderPtr)); // pushing original into buyers
+        // execution.push_back(orderCopyPtr); // pushing copy object to execution array
+        writerBuffer.addOrder(orderCopyPtr);
     }else if(quantity >0){
+        std::cout<<"partial transaction for buyer finally\n";
         //partial transaction for buyer
+        std::cout << "quatity :" <<quantity << std::endl;
         orderPtr->resetQuantity(quantity);
         buyers.push(std::move(orderPtr)); // pushing without copy
     }

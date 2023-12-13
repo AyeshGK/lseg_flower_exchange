@@ -5,17 +5,17 @@
 #include <vector>
 #include <memory>
 
-CSVReader::CSVReader(const std::string& filename) : filename(filename) {}
+CSVReader::CSVReader(const std::string& filename, OrderBuffer& readerBuffer) 
+: filename(filename) , readerBuffer(readerBuffer)
+{}
 
-std::vector<OrderPtr> CSVReader::readCSV() {
+void CSVReader::readCSV() {
     std::ifstream file(filename);
-    // std::vector<Order> orders;
-    // use shared_ptr to avoid memory leak
-    std::vector<OrderPtr> orders;
-
+    
     if (!file.is_open()) {
         std::cerr << "Error: Unable to open file " << filename << std::endl;
-        return orders;
+        readerBuffer.addOrder(nullptr);
+        return ;
     }
 
     // skip the first line (header)
@@ -26,14 +26,16 @@ std::vector<OrderPtr> CSVReader::readCSV() {
     std::string line;
     while (std::getline(file, line)) {
         OrderPtr orderPtr = parseCSVLine(line);
-        orders.push_back(orderPtr);
+        // orders.push_back(orderPtr);
+        readerBuffer.addOrder(orderPtr);
     }
 
     // push final order to buffer
-    orders.push_back(nullptr);
+    // orders.push_back(nullptr);
+    readerBuffer.addOrder(nullptr);
     
     file.close();
-    return orders;
+    // return orders;
 }
 
 OrderPtr CSVReader::parseCSVLine(const std::string& line) {

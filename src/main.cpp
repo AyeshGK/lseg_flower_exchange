@@ -9,23 +9,27 @@
 
 
 int main() {
-
+    OrderBuffer readerBuffer;
     OrderBuffer writerBuffer;
+    
 
     // filename
-    std::string reader_file = "/Users/ayesh/workspace/c++ workshop/flower_exchange/data/orders/orders3.csv";
+    std::string reader_file = "/Users/ayesh/workspace/c++ workshop/flower_exchange/data/orders/orders6.csv";
     std::string writer_file = "/Users/ayesh/workspace/c++ workshop/flower_exchange/data/results/results.csv";
 
     // Create an Exchanger instance with CSV file path
-    Exchanger exchanger(reader_file, writerBuffer);
+    Exchanger exchanger(readerBuffer, writerBuffer);
+    CSVReader reader(reader_file, readerBuffer);
     CSVWriter writer(writer_file,writerBuffer);
 
-    //  in the writer thread call writer.writeCSV(std::ref(writerBuffer))
-    // Create and start the writer thread
+    std::thread readerThread(&CSVReader::readCSV, &reader);
     std::thread writerThread(&CSVWriter::writeCSV, &writer);
+   
+    exchanger.performExchange(); // perfoming on main thread
 
-    exchanger.performExchange();
+   
 
+    readerThread.join();
     writerThread.join();
 
     return 0;

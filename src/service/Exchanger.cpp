@@ -3,10 +3,12 @@
 #include "../../include/Exchanger.h"
 
 
-Exchanger::Exchanger(const std::string& csvFilePath,OrderBuffer& writerBuffer) : writerBuffer(writerBuffer) {
-    // Read orders from the CSV file and take ownership
-    CSVReader csvReader(csvFilePath);
-    orders = csvReader.readCSV();
+Exchanger::Exchanger(OrderBuffer& readerBuffer,OrderBuffer& writerBuffer)
+ : readerBuffer(readerBuffer),writerBuffer(writerBuffer) 
+{
+    // // Read orders from the CSV file and take ownership
+    // CSVReader csvReader(csvFilePath);
+    // orders = csvReader.readCSV();
 }
 
 void Exchanger::performExchange() {
@@ -25,10 +27,12 @@ void Exchanger::performExchange() {
     std::cout << "Orders before exchange:\n";
     // Example: Performing the exchange using the FlowerBookFactory (replace with actual logic)
 
-    std::cout << "orders size: " << orders.size() << "\n";
+    std::cout << "orders size: " << readerBuffer.getSize() << "\n";
 
     int count = 0;
-    for (const auto& order : orders) {
+    // for (const auto& order : orders) {
+    while(true){
+        OrderPtr order = readerBuffer.getOrder();
         if (order==nullptr){
             std::cout << "order is null\n";
             writerBuffer.addOrder(order);// null order added to buffer
