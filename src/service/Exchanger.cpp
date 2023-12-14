@@ -39,7 +39,8 @@ void Exchanger::performExchange() {
 
         // Get or create a flower book for the instrument type
         std::shared_ptr<Book> flowerBook = flowerBookFactory.getFlowerBook(order->getInstrument());
-        flowerBook->match(order,writerBuffer);
+        // flowerBook->match(order,writerBuffer);
+        flowerBook->orderBook(order,writerBuffer);
 
     }
     std::cout << "orders completed";

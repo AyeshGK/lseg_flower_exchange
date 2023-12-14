@@ -1,9 +1,9 @@
-Order ID,Client Order,Instrument,Side,Exec Status,Quantity,Price,Reason,Status
-aa13,Rose,Buy,0,100,55,
-aa14,Rose,Buy,0,100,65,
-aa14,Rose,Buy,2,100,65,
-aa15,Rose,Sell,3,200,65,
-aa13,Rose,Buy,2,100,55,
-aa15,Rose,Sell,3,100,55,
-aa15,Rose,Sell,2,100,1,
-aa16,Rose,Buy,2,100,1,
+Order ID,Client Order,Instrument,Side,Exec Status,Quantity,Price,Transaction Time,Reason,Status
+ord1,aa13,Rose,1 - Buy,0,100,55,20231214-113255.76,
+ord2,aa14,Rose,1 - Buy,0,100,65,20231214-113255.76,
+ord2,aa14,Rose,1 - Buy,2,100,65,20231214-113255.76,
+ord3,aa15,Rose,2 - Sell,3,200,65,20231214-113255.76,
+ord1,aa13,Rose,1 - Buy,2,100,55,20231214-113255.76,
+ord3,aa15,Rose,2 - Sell,3,100,55,20231214-113255.76,
+ord3,aa15,Rose,2 - Sell,2,100,1,20231214-113255.77,
+ord4,aa16,Rose,1 - Buy,2,100,1,20231214-113255.77,

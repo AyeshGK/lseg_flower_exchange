@@ -4,6 +4,9 @@
 #include "../../include/FlowerBookFactory.h"
 #include "../../include/RoseBook.h"  // Include other flower book headers
 #include "../../include/LavenderBook.h"
+#include "../../include/MachineEngineBase.h"
+#include "../../include/NewMatchingEngine.h"
+#include "../../include/OldMatchingEngine.h"
 
 
 std::shared_ptr<Book> FlowerBookFactory::getFlowerBook(const std::string& instrument) {
@@ -12,18 +15,15 @@ std::shared_ptr<Book> FlowerBookFactory::getFlowerBook(const std::string& instru
 
     // If it doesn't exist, create it
     if (it == flowerBooks.end()) {
+
         if(instrument == "Rose")
-        {
-            flowerBooks[instrument] = std::make_shared<RoseBook>();
+        {   
+            flowerBooks[instrument] = std::make_shared<RoseBook>(std::make_shared<OldMatchingEngine>());
         }
         else if(instrument == "Lavender")
         {
-            flowerBooks[instrument] = std::make_shared<LavenderBook>();
+            flowerBooks[instrument] = std::make_shared<LavenderBook>(std::make_shared<OldMatchingEngine>());
         }
-        // else if(instrument == "Tulip")
-        // {
-        //     flowerBooks[instrument] = std::make_shared<TulipBook>();
-        // }
     }  
     return flowerBooks[instrument];
 }
