@@ -9,3 +9,14 @@
  * 
  * Make sure you have the necessary dependencies installed and configured before running the Makefile.
  */
+
+
+cd /Users/ayesh/workspace/c++ workshop/flower_exchange/
+    ```
+
+3. Run the following command to install the required libraries:
+    ```
+    make
+    ```
+
+Once the libraries are installed, you can proceed with running the program using the following command:

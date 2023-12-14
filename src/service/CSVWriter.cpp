@@ -55,9 +55,9 @@ void CSVWriter::writeCSV() {
 }
 
 std::string CSVWriter:: getSide(int side){
-    if(side == 1){
+    if(side == Side::BUY){
         return "1 - Buy";
-    }else if(side == 2){
+    }else if(side == Side::SELL){
         return "2 - Sell";
     }else{
         return "Invalid Side";

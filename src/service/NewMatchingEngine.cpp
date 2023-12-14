@@ -14,7 +14,7 @@ void NewMatchingEngine::match(const OrderPtr& orderPtr,OrderBuffer& writerBuffer
 
     while(isPossibleOrder(side,quantity)){
         // get available order from opposite side
-        OrderPtr availableOrderPtr = side == 1 ? sellers.top() : buyers.top();
+        OrderPtr availableOrderPtr = side == Side::BUY ? sellers.top() : buyers.top();
         if (isPossiblePrice(side,orderPtr,availableOrderPtr)){
             // int availableOrderQuantity = availableOrderPtr->getQuantity();
             
@@ -32,12 +32,10 @@ void NewMatchingEngine::match(const OrderPtr& orderPtr,OrderBuffer& writerBuffer
     // complete if the transaction not happens 
     if(quantity == orderPtr->getQuantity()){
         OrderPtr orderCopyPtr = std::make_shared<Order>(*orderPtr);
-        if(side == 1) {
-            buyers.push(std::move(orderPtr)); // pushing order into buyers
-        }else {
-            sellers.push(std::move(orderPtr)); // pushing order into sellers
-        } // pushing order into sellers
         
+        (side == Side::BUY) ? buyers.push(std::move(orderPtr)) : sellers.push(std::move(orderPtr));
+
+
         //set orderPtr to nullptr 
         const_cast<OrderPtr&>(orderPtr).reset();
 
@@ -46,23 +44,26 @@ void NewMatchingEngine::match(const OrderPtr& orderPtr,OrderBuffer& writerBuffer
     }else if(quantity >0){ // complet the remaining transactions
         //partial transaction for buyer
         orderPtr->resetQuantity(quantity);
-        if(side == 1) buyers.push(std::move(orderPtr)); // pushing order into buyers
-        else sellers.push(std::move(orderPtr)); // pushing order into sellers
+        
+        (side == Side::BUY) ? buyers.push(std::move(orderPtr)) : sellers.push(std::move(orderPtr));
     }
 }
 
 
 bool NewMatchingEngine:: isPossibleOrder(int side, int quantity){
-    if (side ==1){
+    if (side == Side::BUY){
       return quantity > 0 && !sellers.empty();
-    }else{
+    }else if(side == Side::SELL){
         return quantity > 0 && !buyers.empty();
     }
+
+    std::cout<<"Invalid side"<<std::endl; // "Invalid side
+    return false;
 }
 
 
 bool NewMatchingEngine:: isPossiblePrice(int side,const OrderPtr& orderPtr,const OrderPtr& availableOrderPtr){
-    if (side ==1)
+    if (side == Side::BUY)
         return orderPtr->getPrice() >= availableOrderPtr->getPrice();
     else
         return orderPtr->getPrice() <= availableOrderPtr->getPrice();
@@ -86,8 +87,7 @@ void NewMatchingEngine:: equalQuantityMatch(
     availableOrderPtr->setTransactionTime(std::chrono::system_clock::now());
     writerBuffer.addOrder(availableOrderPtr);
 
-    if(orderPtr->getSide() == 1) sellers.pop();
-    else buyers.pop();
+    (orderPtr->getSide() == Side::BUY) ? sellers.pop() : buyers.pop();
 }
 
 
@@ -110,8 +110,7 @@ void  NewMatchingEngine:: lessQuantityMatch(
         availableOrderPtr->setTransactionTime(std::chrono::system_clock::now());
         writerBuffer.addOrder(availableOrderPtr);
 
-        if(orderPtr->getSide() == 1) sellers.pop();
-        else buyers.pop();
+        (orderPtr->getSide() == Side::BUY) ? sellers.pop() : buyers.pop();
 }
 
 
@@ -128,13 +127,9 @@ void NewMatchingEngine:: greaterQuantityMatch(
 
         // partial transaction for availableOrderPtr push that remaining to the priority queue
         availableOrderPtr->resetQuantity(availableOrderPtr->getQuantity() - quantity);
-        if(orderPtr->getSide() == 1) {
-            sellers.pop();
-            sellers.push(availableOrderPtr);
-        }else {
-            buyers.pop();
-            buyers.push(availableOrderPtr);
-        }
+
+        (orderPtr->getSide() == Side::BUY) ? 
+        (sellers.pop(), sellers.push(availableOrderPtr)) : (buyers.pop(), buyers.push(availableOrderPtr));
 
         // update the trasaction for the availableOrderPtr push that into the execution report
         availableOrderPtr->resetQuantity(quantity);

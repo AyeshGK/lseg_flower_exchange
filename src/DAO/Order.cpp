@@ -9,7 +9,7 @@ int Order::orderCount = 0;
 Order::Order(
     const std::string& clientOrderId, 
     const std::string& instrument, 
-    int side, 
+    Side side, 
     int quantity, 
     double price)
 {
@@ -78,6 +78,8 @@ std::chrono::system_clock::time_point Order::getTransactionTime() const
 }
 
 
+
+
 void Order::setClientOrderId(const std::string& clientOrderId) {
     // std::cout << "clientOrderId: " << clientOrderId << std::endl;
     // Rule: Client Order ID should be an alphanumeric string with a maximum length of 7 characters.
@@ -131,14 +133,19 @@ void Order::setSide(const std::string& side) {
 }
 
 void Order::setSide(int side) {
-
-    // Rule: Side should be 1 for "Buy" and 2 for "Sell"
-    this->side = side;
-    if(side != 1 && side != 2) {
-        // std::cerr << "Error: Invalid Side." << std::endl;
+    if(side == 1){
+        this->side = Side::BUY;
+    }else if(side == 2){
+        this->side = Side::SELL;
+    }else{
         throw std::invalid_argument("Invalid Side");
     }
-    // std:: cout << "side: " << side << std::endl;
+}
+
+void Order::setSide(Side side)
+{
+    this->side = side;
+
 }
 
 void Order::setQuantity(const std::string& quantity) {

@@ -24,7 +24,7 @@ public:
     // constructor
     Order(const std::string& clientOrderId,
         const std::string& instrument,
-        int side, int quantity, 
+        Side side, int quantity, 
         double price
         // ,const std::string& traderId
         );
@@ -53,7 +53,7 @@ public:
     // declare setters
     void setClientOrderId(const std::string& clientOrderId);
     void setInstrument(const std::string& instrument);
-    void setSide(int side);
+    void setSide(Side side);
     void setQuantity(int quantity);
     void setPrice(double price);
     void setOrderId(int orderId);
@@ -71,7 +71,7 @@ public:
 private:
     std::string clientOrderId;
     std::string instrument;
-    int side;        // Assuming 1 for "Buy" and 2 for "Sell"
+    Side side;        // Assuming 1 for "Buy" and 2 for "Sell"
     int quantity;
     double price;
     int orderId = 0;
@@ -84,7 +84,10 @@ private:
     std::chrono::system_clock::time_point transactionTime;
 
     static int orderCount; // static variable to keep track of number of orders
+
+
     int increamentAndGetOrderCount();
+    void setSide(int side);
 };
 
 using OrderPtr = std::shared_ptr<Order>;
