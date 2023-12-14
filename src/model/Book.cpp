@@ -1,17 +1,8 @@
-#include "../../include/Book.h"
 #include <iostream>
 
-// constructor
+#include "../../include/Book.h"
 
 
-void Book::addOrder(const OrderPtr& orderPtr) {
-    if (orderPtr->getSide() == 1) {
-        buyers.push(std::move(orderPtr));
-        
-    } else {
-        sellers.push(std::move(orderPtr));
-    }
-}
 
 void Book::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
         std::cout<<"sellersMatch\n";
@@ -40,6 +31,7 @@ void Book::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
                     std::cout<<"complete transaction for seller\n";
                     buyer->setStatus(2);
                     // execution.push_back(buyer);
+                    // buyer->setOrderId(increamentAndGetOrderCount());
                     writerBuffer.addOrder(buyer);
                     buyers.pop();
 
@@ -48,6 +40,7 @@ void Book::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
                     orderPtr->setStatus(2);
                     orderPtr->setPrice(buyer->getPrice()); // set to the buyer price
                     // execution.push_back(orderPtr);
+
                     writerBuffer.addOrder(orderPtr);
                 }else if(buyerQuantity < quantity){
                     //execute buyer order 
@@ -230,6 +223,7 @@ void Book::match(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
             OrderPtr orderCopyPtr = std::make_shared<Order>(*orderPtr);
             buyers.push(std::move(orderPtr)); // pushing without copy
             // execution.push_back(orderCopyPtr);
+            // orderCopyPtr->setOrderId(increamentAndGetOrderCount());
             writerBuffer.addOrder(orderCopyPtr);
         }
         else{
@@ -246,6 +240,7 @@ void Book::match(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
             OrderPtr orderCopyPtr = std::make_shared<Order>(*orderPtr);
             sellers.push(std::move(orderPtr)); // pushing without copy
             // execution.push_back(orderCopyPtr);
+            // orderCopyPtr->setOrderId(increamentAndGetOrderCount());
             writerBuffer.addOrder(orderCopyPtr);
         }
         else{

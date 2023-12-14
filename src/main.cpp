@@ -7,7 +7,6 @@
 #include "../include/OrderBuffer.h"
 
 
-
 int main() {
     OrderBuffer readerBuffer;
     OrderBuffer writerBuffer;
@@ -26,8 +25,6 @@ int main() {
     std::thread writerThread(&CSVWriter::writeCSV, &writer);
    
     exchanger.performExchange(); // perfoming on main thread
-
-   
 
     readerThread.join();
     writerThread.join();

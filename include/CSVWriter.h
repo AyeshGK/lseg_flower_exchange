@@ -24,6 +24,8 @@ private:
 
     OrderBuffer& writerBuffer;
 
+    void add_row(std::ofstream & file, OrderPtr order);
+
 };
 
 #endif  // CSV_WRITER_H

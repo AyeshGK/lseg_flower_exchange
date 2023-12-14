@@ -1,7 +1,0 @@
-// generate sample code for hello.h 
-#ifndef HELLO_H
-#define HELLO_H
-
-void print_hello();
-
-#endif  // HELLO_H

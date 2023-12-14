@@ -5,13 +5,16 @@
 #include "Order.h"
 
  
+// Initialize the static member only once
+int Order::orderCount = 0;
+
 Order::Order(
     const std::string& clientOrderId, 
     const std::string& instrument, 
     int side, 
     int quantity, 
-    double price, 
-    const std::string& traderId
+    double price
+    // ,const std::string& traderId
     )
 {
     // Use the setters to apply rules and constraints
@@ -20,7 +23,9 @@ Order::Order(
     setSide(side);
     setQuantity(quantity);
     setPrice(price);
-    setTraderId(traderId);
+    // setTraderId(traderId);
+
+    setOrderId(increamentAndGetOrderCount());
 }
 
 Order::Order(
@@ -28,8 +33,9 @@ Order::Order(
     const std::string &instrument, 
     const std::string &side, 
     const std::string &quantity, 
-    const std::string &price, 
-    const std::string &traderId)
+    const std::string &price
+    // ,const std::string &traderId
+    )
 {
     // Use the setters to apply rules and constraints
     setClientOrderId(clientOrderId);
@@ -37,7 +43,8 @@ Order::Order(
     setSide(side);
     setQuantity(quantity);
     setPrice(price);
-    setTraderId(traderId);
+    // setTraderId(traderId);
+    setOrderId(increamentAndGetOrderCount());
 
 }
 // Order::Order()
@@ -66,9 +73,9 @@ double Order::getPrice() const {
     return price;
 }
 
-const std::string& Order::getTraderId() const {
-    return traderId;
-}
+// const std::string& Order::getTraderId() const {
+//     return traderId;
+// }
 
 const std::string& Order::getReason() const {
     return reason;
@@ -76,6 +83,11 @@ const std::string& Order::getReason() const {
 
 int Order::getStatus() const {
     return status;
+}
+
+int Order::getOrderId() const
+{
+    return orderId;
 }
 
 // bool Order::getFinal() const
@@ -196,13 +208,23 @@ void Order::setPrice(double price) {
     // std:: cout << "price: " << price << std::endl;
 }
 
-void Order::setTraderId(const std::string& traderId) {
-    this->traderId = traderId;
-}
+// void Order::setTraderId(const std::string& traderId) {
+//     this->traderId = traderId;
+// }
 
 void Order::setStatus(int status)
 {
     this->status = status;
+}
+
+void Order::setOrderId(int orderId)
+{
+    this->orderId = orderId;
+}
+
+int Order::increamentAndGetOrderCount()
+{
+    return ++orderCount;
 }
 
 // Implementation of the greater-than operator (for descending order)

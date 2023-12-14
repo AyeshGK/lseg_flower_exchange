@@ -40,7 +40,7 @@ void CSVReader::readCSV() {
 
 OrderPtr CSVReader::parseCSVLine(const std::string& line) {
     std::stringstream ss(line);
-    std::string clientOrderId, instrument, traderId, quantityStr, priceStr,sideStr;
+    std::string clientOrderId, instrument,  quantityStr, priceStr,sideStr;
 
 
     // Assuming the CSV format: Client Order ID,Instrument,Side,Quantity,Price,Trader ID
@@ -49,9 +49,9 @@ OrderPtr CSVReader::parseCSVLine(const std::string& line) {
     std::getline(ss, sideStr, ',');
     std::getline(ss, quantityStr, ',');
     std::getline(ss, priceStr, ',');
-    std::getline(ss, traderId, ',');
+    // std::getline(ss, traderId, ',');
 
-    return std::make_shared<Order>(clientOrderId, instrument, sideStr, quantityStr, priceStr, traderId);
+    return std::make_shared<Order>(clientOrderId, instrument, sideStr, quantityStr, priceStr);
 
     // return std::make_shared<Order>(clientOrderId, instrument, side, quantity, price, traderId);
 }

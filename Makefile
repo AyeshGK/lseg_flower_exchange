@@ -8,7 +8,7 @@ DATA_DIR = data
 CXXFLAGS = -std=c++11 -Wall
 
 # Source files
-SRCS = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/DAO/*.cpp) $(wildcard $(SRC_DIR)/service/*.cpp) $(wildcard $(SRC_DIR)/model/*.cpp) $(wildcard $(SRC_DIR)/FlowerFactory/*.cpp)
+SRCS = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/dao/*.cpp) $(wildcard $(SRC_DIR)/service/*.cpp) $(wildcard $(SRC_DIR)/model/*.cpp) $(wildcard $(SRC_DIR)/factory/*.cpp)
 
 # Header files
 INCLUDES = -I$(INCLUDE_DIR)
@@ -29,10 +29,7 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo "Compiling $<..."
 	g++ $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-# clean:
-# 	@echo "Cleaning up..."
-# 	rm -rf $(BUILD_DIR)/*.o $(BUILD_DIR)/final
-
+# Clean up
 clean:
 	@echo "Cleaning up..."
 	rm -rf $(BUILD_DIR)/*

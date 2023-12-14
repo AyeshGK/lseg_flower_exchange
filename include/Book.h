@@ -3,10 +3,10 @@
 
 #include <vector>
 #include <queue>
-#include "Order.h"
-#include "OrderBuffer.h"
 #include <iostream>
 
+#include "Order.h"
+#include "OrderBuffer.h"
 
 // comparator 
 class Comparator {
@@ -28,27 +28,15 @@ public:
 
 class Book {
 public:
-    // Add an order to the handler
-    void addOrder(const OrderPtr& order);
-
-    // matching 
-    // void match(const OrderPtr& order);
-
     void match(const OrderPtr& order,OrderBuffer& writerBuffer) ;
 
 private:
-  // // Priority queues for buyers and sellers
-  //   std::priority_queue<Order, std::vector<Order>, std::greater<Order>> buyers; // For sell side (ascending)
-  //   std::priority_queue<Order, std::vector<Order>> sellers; // For buy side (descending)
-
-
-    // Priority queues for buyers and sellers
     std::priority_queue<OrderPtr, std::vector<OrderPtr>,Comparator> buyers; // For sell side (ascending)
     std::priority_queue<OrderPtr, std::vector<OrderPtr>,Comparator> sellers; // For buy side (descending)
 
-
     void buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer);
     void sellersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer);
+
 };
 
 #endif  // BOOK_H
