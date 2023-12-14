@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>      // std::chrono::system_clock
 
 #include "../../include/Book.h"
 
@@ -32,6 +33,7 @@ void Book::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
                     buyer->setStatus(2);
                     // execution.push_back(buyer);
                     // buyer->setOrderId(increamentAndGetOrderCount());
+                    buyer->setTransactionTime(std::chrono::system_clock::now());
                     writerBuffer.addOrder(buyer);
                     buyers.pop();
 
@@ -40,13 +42,14 @@ void Book::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
                     orderPtr->setStatus(2);
                     orderPtr->setPrice(buyer->getPrice()); // set to the buyer price
                     // execution.push_back(orderPtr);
-
+                    orderPtr->setTransactionTime(std::chrono::system_clock::now());
                     writerBuffer.addOrder(orderPtr);
                 }else if(buyerQuantity < quantity){
                     //execute buyer order 
                     quantity -= buyerQuantity;
                     buyer->setStatus(2);
                     // execution.push_back(buyer);
+                    buyer->setTransactionTime(std::chrono::system_clock::now());
                     writerBuffer.addOrder(buyer);
                     buyers.pop();
     
@@ -57,6 +60,7 @@ void Book::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
                     orderCopyPtr->setPrice(buyer->getPrice()); // set to the buyer price
                     orderCopyPtr->setStatus(3);
                     // execution.push_back(orderCopyPtr);
+                    orderCopyPtr->setTransactionTime(std::chrono::system_clock::now());
                     writerBuffer.addOrder(orderCopyPtr);
                 }else{
                     //execute seller order 
@@ -68,6 +72,7 @@ void Book::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
                     buyer->resetQuantity(quantity);
                     buyer->setStatus(3);
                     // execution.push_back(buyer);
+                    buyer->setTransactionTime(std::chrono::system_clock::now());
                     writerBuffer.addOrder(buyer);
                     
                     quantity = 0;
@@ -77,6 +82,7 @@ void Book::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
                     orderPtr->setStatus(2);
                     orderPtr->setPrice(buyer->getPrice()); // set to the buyer price
                     // execution.push_back(orderPtr);
+                    orderPtr->setTransactionTime(std::chrono::system_clock::now());
                     writerBuffer.addOrder(orderPtr);
                 }
     
@@ -91,6 +97,7 @@ void Book::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
             OrderPtr orderCopyPtr = std::make_shared<Order>(*orderPtr);
             sellers.push(std::move(orderPtr)); // pushing original into sellers 
             // execution.push_back(orderCopyPtr); // pushing copy object to execution array
+            orderCopyPtr->setTransactionTime(std::chrono::system_clock::now());
             writerBuffer.addOrder(orderCopyPtr);
         }else if(quantity >0){
             std::cout<<"partial transaction for seller finally\n";
@@ -132,6 +139,7 @@ void Book::buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
                 std::cout<<"complete transaction for buyer\n";
                 seller->setStatus(2);
                 // execution.push_back(seller);
+                seller->setTransactionTime(std::chrono::system_clock::now());
                 writerBuffer.addOrder(seller);
                 sellers.pop();
 
@@ -140,12 +148,14 @@ void Book::buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
                 orderPtr->setStatus(2);
                 orderPtr->setPrice(seller->getPrice()); // set to the seller price
                 // execution.push_back(orderPtr);
+                orderPtr->setTransactionTime(std::chrono::system_clock::now());
                 writerBuffer.addOrder(orderPtr);
             }else if(sellerQuantity < quantity){
                 //execute seller order 
                 quantity -= sellerQuantity;
                 seller->setStatus(2);
                 // execution.push_back(seller);
+                seller->setTransactionTime(std::chrono::system_clock::now());
                 writerBuffer.addOrder(seller);
                 sellers.pop();
 
@@ -156,6 +166,7 @@ void Book::buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
                 orderCopyPtr->setPrice(seller->getPrice()); // set to the seller price
                 orderCopyPtr->setStatus(3);
                 // execution.push_back(orderCopyPtr);
+                orderCopyPtr->setTransactionTime(std::chrono::system_clock::now());
                 writerBuffer.addOrder(orderCopyPtr);
             }else{
                 //execute buyer order 
@@ -167,6 +178,7 @@ void Book::buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
                 seller->resetQuantity(quantity);
                 seller->setStatus(3);
                 // execution.push_back(seller);
+                seller->setTransactionTime(std::chrono::system_clock::now());
                 writerBuffer.addOrder(seller);
                 
                 quantity = 0;
@@ -176,6 +188,7 @@ void Book::buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
                 orderPtr->setStatus(2);
                 orderPtr->setPrice(seller->getPrice()); // set to the seller price
                 // execution.push_back(orderPtr);
+                orderPtr->setTransactionTime(std::chrono::system_clock::now());
                 writerBuffer.addOrder(orderPtr);
             }
 
@@ -190,6 +203,7 @@ void Book::buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
         OrderPtr orderCopyPtr = std::make_shared<Order>(*orderPtr);
         buyers.push(std::move(orderPtr)); // pushing original into buyers
         // execution.push_back(orderCopyPtr); // pushing copy object to execution array
+        orderCopyPtr->setTransactionTime(std::chrono::system_clock::now());
         writerBuffer.addOrder(orderCopyPtr);
     }else if(quantity >0){
         std::cout<<"partial transaction for buyer finally\n";
@@ -224,6 +238,7 @@ void Book::match(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
             buyers.push(std::move(orderPtr)); // pushing without copy
             // execution.push_back(orderCopyPtr);
             // orderCopyPtr->setOrderId(increamentAndGetOrderCount());
+            orderCopyPtr->setTransactionTime(std::chrono::system_clock::now());
             writerBuffer.addOrder(orderCopyPtr);
         }
         else{
@@ -241,6 +256,7 @@ void Book::match(const OrderPtr& orderPtr,OrderBuffer& writerBuffer) {
             sellers.push(std::move(orderPtr)); // pushing without copy
             // execution.push_back(orderCopyPtr);
             // orderCopyPtr->setOrderId(increamentAndGetOrderCount());
+            orderCopyPtr->setTransactionTime(std::chrono::system_clock::now());
             writerBuffer.addOrder(orderCopyPtr);
         }
         else{

@@ -12,7 +12,6 @@ class CSVWriter {
 public:
     CSVWriter(const std::string& filename, OrderBuffer& writerBuffer);
     
-
     void writeCSV();
 
     // std::vector<OrderPtr> appendCSV(std::vector<OrderPtr>& orders);
@@ -25,6 +24,8 @@ private:
     OrderBuffer& writerBuffer;
 
     void add_row(std::ofstream & file, OrderPtr order);
+
+    std::string transactionTime(std::chrono::system_clock::time_point timePoint) const;
 
 };
 

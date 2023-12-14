@@ -3,6 +3,9 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
+#include <ctime>
+#include <chrono>
 
 
 
@@ -14,12 +17,13 @@ CSVWriter::CSVWriter(const std::string& csvFilePath, OrderBuffer& writerBuffer)
 void CSVWriter:: add_row(std::ofstream& file,OrderPtr order)
 {
     file  << "ord" << order->getOrderId() << ","
-    << order->getClientOrderId() << ","
+            << order->getClientOrderId() << ","
             << order->getInstrument() << ","
-            << (order->getSide() == 1 ? "Buy" : "Sell") << ","
+            << (order->getSide() == 1 ? "1 - Buy" : "2 - Sell") << ","
             << order->getStatus() << ","
             << order->getQuantity() << ","
             << order->getPrice() << ","
+            << transactionTime(order->getTransactionTime()) << ","
             << order->getReason() << "\n";
 }
 
@@ -28,14 +32,12 @@ void CSVWriter::writeCSV() {
     std::ofstream file(filename);
 
     if (!file.is_open()) {
-        // Handle error opening file
-        // throw std::runtime_error("Error opening file");
         std::cerr << "Error: Unable to open file " << filename << std::endl;
         return ;
     }
 
     // Write header
-    file << "Order ID,Client Order,Instrument,Side,Exec Status,Quantity,Price,Reason,Status\n";
+    file << "Order ID,Client Order,Instrument,Side,Exec Status,Quantity,Price,Transaction Time,Reason,Status\n";
 
 
     while (true){
@@ -46,21 +48,28 @@ void CSVWriter::writeCSV() {
             std::cout << "Orders writing completed." << std::endl; 
             break;
         }
-
-        // file  << order->getClientOrderId() << ","
-        //     << order->getInstrument() << ","
-        //     << (order->getSide() == 1 ? "Buy" : "Sell") << ","
-        //     << order->getStatus() << ","
-        //     << order->getQuantity() << ","
-        //     << order->getPrice() << ","
-        //     << order->getReason() << "\n";
-
         add_row(file,order);
-      
     }
 
     file.close();
-
-
 }
 
+std::string CSVWriter::transactionTime(std::chrono::system_clock::time_point timePoint)const {
+
+    std::time_t currentTime = std::chrono::system_clock::to_time_t(timePoint);
+
+    // Get the milliseconds part
+    auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(
+        timePoint.time_since_epoch() % std::chrono::seconds(1)
+    );
+
+    // Convert the time to a struct tm in UTC
+    struct tm* timeInfo = std::gmtime(&currentTime);
+
+    // Format the time as YYYYMMDD-HHMMSS.sss using strftime
+    char buffer[30];
+    std::strftime(buffer, sizeof(buffer), "%Y%m%d-%H%M%S", timeInfo);
+    // std::cout << buffer << "." << std::setfill('0') << std::setw(3) << milliseconds.count() << std::endl;
+
+    return std::string(buffer) + "." + std::to_string(milliseconds.count());
+}

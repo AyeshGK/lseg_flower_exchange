@@ -90,14 +90,11 @@ int Order::getOrderId() const
     return orderId;
 }
 
-// bool Order::getFinal() const
-// {
-//     return isFinal;
-// }
+std::chrono::system_clock::time_point Order::getTransactionTime() const
+{
+    return transactionTime;
+}
 
-// setters
-
-// std::string clientOrderId;
 
 void Order::setClientOrderId(const std::string& clientOrderId) {
     // std::cout << "clientOrderId: " << clientOrderId << std::endl;
@@ -208,9 +205,6 @@ void Order::setPrice(double price) {
     // std:: cout << "price: " << price << std::endl;
 }
 
-// void Order::setTraderId(const std::string& traderId) {
-//     this->traderId = traderId;
-// }
 
 void Order::setStatus(int status)
 {
@@ -225,6 +219,11 @@ void Order::setOrderId(int orderId)
 int Order::increamentAndGetOrderCount()
 {
     return ++orderCount;
+}
+
+void Order::setTransactionTime(std::chrono::system_clock::time_point transactionTime)
+{
+    this->transactionTime = transactionTime;
 }
 
 // Implementation of the greater-than operator (for descending order)
@@ -248,4 +247,4 @@ int Order::increamentAndGetOrderCount()
 //     this->isFinal = true;
 // }
 
-// Path: src/DAO/Order.h
+// Path: src/dao/Order.cpp

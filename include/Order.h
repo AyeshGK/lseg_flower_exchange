@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <chrono>
 
 
 
@@ -34,6 +35,7 @@ public:
     const std::string& getReason() const;
     int getStatus() const;
     int getOrderId() const;
+    std::chrono::system_clock::time_point getTransactionTime() const;
 
 
     // declare setters
@@ -43,7 +45,7 @@ public:
     void setQuantity(int quantity);
     void setPrice(double price);
     void setOrderId(int orderId);
-    // void setTraderId(const std::string& traderId);
+    void setTransactionTime(std::chrono::system_clock::time_point transactionTime);
 
     void resetQuantity(int quantity);
     void setStatus(int status);
@@ -61,11 +63,13 @@ private:
     int quantity;
     double price;
     int orderId = 0;
-    
 
     //delare private property called reason which maximum 50 characters and is initialized to empty string
     std::string reason = "";
     int status = 0; 
+
+    // transaction time 
+    std::chrono::system_clock::time_point transactionTime;
 
     static int orderCount; // static variable to keep track of number of orders
     int increamentAndGetOrderCount();
