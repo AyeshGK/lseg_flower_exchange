@@ -12,13 +12,10 @@ void OldMatchingEngine::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& write
         double price = orderPtr->getPrice();
     
         while(!buyers.empty()&& quantity >0){
-            std::cout<<"buyers not empty\n";
         
 
             // OrderPtr buyer = std::make_shared<Order>(buyers.top());
             OrderPtr buyer = buyers.top();
-            std::cout<<"memory address: "<<&buyer<<"\n";
-            std::cout<<"buyer price: "<<buyer->getPrice()<<"\n";
             int orderQuantity = quantity;
             if(buyer->getPrice() >= price){
                 
@@ -29,7 +26,7 @@ void OldMatchingEngine::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& write
                     quantity =0 ;
                     //complete transaction for seller
                     std::cout<<"complete transaction for seller\n";
-                    buyer->setStatus(2);
+                    buyer->setStatus(Status::FILL);
                     // execution.push_back(buyer);
                     // buyer->setOrderId(increamentAndGetOrderCount());
                     buyer->setTransactionTime(std::chrono::system_clock::now());
@@ -38,7 +35,7 @@ void OldMatchingEngine::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& write
 
                     //complete transaction for buyer
                     std::cout<<"complete transaction for buyer\n";
-                    orderPtr->setStatus(2);
+                    orderPtr->setStatus(Status::FILL);
                     orderPtr->setPrice(buyer->getPrice()); // set to the buyer price
                     // execution.push_back(orderPtr);
                     orderPtr->setTransactionTime(std::chrono::system_clock::now());
@@ -46,7 +43,7 @@ void OldMatchingEngine::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& write
                 }else if(buyerQuantity < quantity){
                     //execute buyer order 
                     quantity -= buyerQuantity;
-                    buyer->setStatus(2);
+                    buyer->setStatus(Status::FILL);
                     // execution.push_back(buyer);
                     buyer->setTransactionTime(std::chrono::system_clock::now());
                     writerBuffer.addOrder(buyer);
@@ -57,7 +54,7 @@ void OldMatchingEngine::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& write
                     OrderPtr orderCopyPtr = std::make_shared<Order>(*orderPtr);
                     orderCopyPtr->resetQuantity(orderQuantity - buyerQuantity);
                     orderCopyPtr->setPrice(buyer->getPrice()); // set to the buyer price
-                    orderCopyPtr->setStatus(3);
+                    orderCopyPtr->setStatus(Status::PFILL);
                     // execution.push_back(orderCopyPtr);
                     orderCopyPtr->setTransactionTime(std::chrono::system_clock::now());
                     writerBuffer.addOrder(orderCopyPtr);
@@ -69,7 +66,7 @@ void OldMatchingEngine::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& write
                     
                     //update the transaction
                     buyer->resetQuantity(quantity);
-                    buyer->setStatus(3);
+                    buyer->setStatus(Status::PFILL);
                     // execution.push_back(buyer);
                     buyer->setTransactionTime(std::chrono::system_clock::now());
                     writerBuffer.addOrder(buyer);
@@ -78,7 +75,7 @@ void OldMatchingEngine::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& write
     
                     //complete transaction for seller
                     std::cout<<"complete transaction for seller\n";
-                    orderPtr->setStatus(2);
+                    orderPtr->setStatus(Status::FILL);
                     orderPtr->setPrice(buyer->getPrice()); // set to the buyer price
                     // execution.push_back(orderPtr);
                     orderPtr->setTransactionTime(std::chrono::system_clock::now());
@@ -86,7 +83,6 @@ void OldMatchingEngine::sellersMatch(const OrderPtr& orderPtr,OrderBuffer& write
                 }
     
             }else{
-                std::cout << "breaking ....."<< std::endl;
                 break;
             }
         }
@@ -126,14 +122,14 @@ void OldMatchingEngine::buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writer
             if(sellerQuantity == quantity){
                 quantity =0 ;
                 //complete transaction for buyer
-                seller->setStatus(2);
+                seller->setStatus(Status::FILL);
                 // execution.push_back(seller);
                 seller->setTransactionTime(std::chrono::system_clock::now());
                 writerBuffer.addOrder(seller);
                 sellers.pop();
 
                 //complete transaction for seller
-                orderPtr->setStatus(2);
+                orderPtr->setStatus(Status::FILL);
                 orderPtr->setPrice(seller->getPrice()); // set to the seller price
                 // execution.push_back(orderPtr);
                 orderPtr->setTransactionTime(std::chrono::system_clock::now());
@@ -141,7 +137,7 @@ void OldMatchingEngine::buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writer
             }else if(sellerQuantity < quantity){
                 //execute seller order 
                 quantity -= sellerQuantity;
-                seller->setStatus(2);
+                seller->setStatus(Status::FILL);
                 // execution.push_back(seller);
                 seller->setTransactionTime(std::chrono::system_clock::now());
                 writerBuffer.addOrder(seller);
@@ -151,7 +147,7 @@ void OldMatchingEngine::buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writer
                 OrderPtr orderCopyPtr = std::make_shared<Order>(*orderPtr);
                 orderCopyPtr->resetQuantity(orderQuantity - sellerQuantity);
                 orderCopyPtr->setPrice(seller->getPrice()); // set to the seller price
-                orderCopyPtr->setStatus(3);
+                orderCopyPtr->setStatus(Status::PFILL);
                 // execution.push_back(orderCopyPtr);
                 orderCopyPtr->setTransactionTime(std::chrono::system_clock::now());
                 writerBuffer.addOrder(orderCopyPtr);
@@ -163,7 +159,7 @@ void OldMatchingEngine::buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writer
                 
                 //update the transaction
                 seller->resetQuantity(quantity);
-                seller->setStatus(3);
+                seller->setStatus(Status::PFILL);
                 // execution.push_back(seller);
                 seller->setTransactionTime(std::chrono::system_clock::now());
                 writerBuffer.addOrder(seller);
@@ -171,7 +167,7 @@ void OldMatchingEngine::buyersMatch(const OrderPtr& orderPtr,OrderBuffer& writer
                 quantity = 0;
 
                 //complete transaction for buyer
-                orderPtr->setStatus(2);
+                orderPtr->setStatus(Status::FILL);
                 orderPtr->setPrice(seller->getPrice()); // set to the seller price
                 // execution.push_back(orderPtr);
                 orderPtr->setTransactionTime(std::chrono::system_clock::now());

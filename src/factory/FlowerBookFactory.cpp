@@ -18,12 +18,14 @@ std::shared_ptr<Book> FlowerBookFactory::getFlowerBook(const std::string& instru
 
         if(instrument == "Rose")
         {   
-            flowerBooks[instrument] = std::make_shared<RoseBook>(std::make_shared<OldMatchingEngine>());
+            flowerBooks[instrument] = std::make_shared<RoseBook>(std::make_shared<NewMatchingEngine>());
         }
         else if(instrument == "Lavender")
         {
-            flowerBooks[instrument] = std::make_shared<LavenderBook>(std::make_shared<OldMatchingEngine>());
+            flowerBooks[instrument] = std::make_shared<LavenderBook>(std::make_shared<NewMatchingEngine>());
         }
     }  
     return flowerBooks[instrument];
 }
+
+// path : src/factory/FlowerBookFactory.h

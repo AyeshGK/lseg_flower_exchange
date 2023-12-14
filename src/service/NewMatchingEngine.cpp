@@ -4,6 +4,7 @@
 
 NewMatchingEngine::NewMatchingEngine(){}
 
+
 void NewMatchingEngine::match(const OrderPtr& orderPtr,OrderBuffer& writerBuffer){
     // check weather the order is buy or sell 
     int side = orderPtr->getSide();
@@ -50,6 +51,7 @@ void NewMatchingEngine::match(const OrderPtr& orderPtr,OrderBuffer& writerBuffer
     }
 }
 
+
 bool NewMatchingEngine:: isPossibleOrder(int side, int quantity){
     if (side ==1){
       return quantity > 0 && !sellers.empty();
@@ -58,6 +60,7 @@ bool NewMatchingEngine:: isPossibleOrder(int side, int quantity){
     }
 }
 
+
 bool NewMatchingEngine:: isPossiblePrice(int side,const OrderPtr& orderPtr,const OrderPtr& availableOrderPtr){
     if (side ==1)
         return orderPtr->getPrice() >= availableOrderPtr->getPrice();
@@ -65,26 +68,28 @@ bool NewMatchingEngine:: isPossiblePrice(int side,const OrderPtr& orderPtr,const
         return orderPtr->getPrice() <= availableOrderPtr->getPrice();
 }
 
+
 void NewMatchingEngine:: equalQuantityMatch(
     const OrderPtr& orderPtr,
     const OrderPtr& availableOrderPtr,
     int& quantity,
     OrderBuffer& writerBuffer){
     // complete the transaction for the orderPtr
-    orderPtr->setStatus(2);
+    orderPtr->setStatus(Status::FILL);
     orderPtr->setPrice(availableOrderPtr->getPrice());
     orderPtr->setTransactionTime(std::chrono::system_clock::now());
     writerBuffer.addOrder(orderPtr);
 
     quantity = 0;
     // complete the transaction for the availableOrderPtr 
-    availableOrderPtr->setStatus(2);
+    availableOrderPtr->setStatus(Status::FILL);
     availableOrderPtr->setTransactionTime(std::chrono::system_clock::now());
     writerBuffer.addOrder(availableOrderPtr);
 
     if(orderPtr->getSide() == 1) sellers.pop();
     else buyers.pop();
 }
+
 
 void  NewMatchingEngine:: lessQuantityMatch(   
     const OrderPtr& orderPtr,
@@ -95,13 +100,13 @@ void  NewMatchingEngine:: lessQuantityMatch(
         OrderPtr orderCopyPtr = std::make_shared<Order>(*orderPtr);
         orderCopyPtr->resetQuantity(quantity - availableOrderPtr->getQuantity());
         orderCopyPtr->setPrice(availableOrderPtr->getPrice());
-        orderCopyPtr->setStatus(3);
+        orderCopyPtr->setStatus(Status::PFILL);
         orderCopyPtr->setTransactionTime(std::chrono::system_clock::now());
         writerBuffer.addOrder(orderCopyPtr);
 
         // complete the transaction for the availableOrderPtr
         quantity -=  availableOrderPtr->getQuantity();
-        availableOrderPtr->setStatus(2);
+        availableOrderPtr->setStatus(Status::FILL);
         availableOrderPtr->setTransactionTime(std::chrono::system_clock::now());
         writerBuffer.addOrder(availableOrderPtr);
 
@@ -116,7 +121,7 @@ void NewMatchingEngine:: greaterQuantityMatch(
     int& quantity,
     OrderBuffer& writerBuffer){
         // completed transaction for the orderPtr push that into the execution report
-        orderPtr->setStatus(2);
+        orderPtr->setStatus(Status::FILL);
         orderPtr->setPrice(availableOrderPtr->getPrice()); // set to the availableOrderPtr price
         orderPtr->setTransactionTime(std::chrono::system_clock::now());
         writerBuffer.addOrder(orderPtr);
@@ -133,7 +138,7 @@ void NewMatchingEngine:: greaterQuantityMatch(
 
         // update the trasaction for the availableOrderPtr push that into the execution report
         availableOrderPtr->resetQuantity(quantity);
-        availableOrderPtr->setStatus(3);
+        availableOrderPtr->setStatus(Status::PFILL);
         availableOrderPtr->setTransactionTime(std::chrono::system_clock::now());
         writerBuffer.addOrder(availableOrderPtr);
 

@@ -6,6 +6,18 @@
 #include <chrono>
 
 
+enum Status {
+    NEW = 0,
+    REJECTED = 1,
+    FILL = 2,
+    PFILL = 3
+};
+
+enum Side {
+    BUY = 1,
+    SELL = 2
+};
+
 
 class Order {
 public:
@@ -48,7 +60,7 @@ public:
     void setTransactionTime(std::chrono::system_clock::time_point transactionTime);
 
     void resetQuantity(int quantity);
-    void setStatus(int status);
+    void setStatus(Status status);
 
 
     // declare string setters 
@@ -66,7 +78,7 @@ private:
 
     //delare private property called reason which maximum 50 characters and is initialized to empty string
     std::string reason = "";
-    int status = 0; 
+    Status status = Status::NEW; 
 
     // transaction time 
     std::chrono::system_clock::time_point transactionTime;

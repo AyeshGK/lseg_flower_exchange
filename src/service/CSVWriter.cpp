@@ -19,8 +19,8 @@ void CSVWriter:: add_row(std::ofstream& file,OrderPtr order)
     file  << "ord" << order->getOrderId() << ","
             << order->getClientOrderId() << ","
             << order->getInstrument() << ","
-            << (order->getSide() == 1 ? "1 - Buy" : "2 - Sell") << ","
-            << order->getStatus() << ","
+            << getSide(order->getSide()) << ","
+            << getStatus(order->getStatus()) << ","
             << order->getQuantity() << ","
             << order->getPrice() << ","
             << transactionTime(order->getTransactionTime()) << ","
@@ -37,7 +37,7 @@ void CSVWriter::writeCSV() {
     }
 
     // Write header
-    file << "Order ID,Client Order,Instrument,Side,Exec Status,Quantity,Price,Transaction Time,Reason,Status\n";
+    file << "Order ID,Client Order,Instrument,Side,Exec Status,Quantity,Price,Transaction Time,Reason\n";
 
 
     while (true){
@@ -52,6 +52,30 @@ void CSVWriter::writeCSV() {
     }
 
     file.close();
+}
+
+std::string CSVWriter:: getSide(int side){
+    if(side == 1){
+        return "1 - Buy";
+    }else if(side == 2){
+        return "2 - Sell";
+    }else{
+        return "Invalid Side";
+    }
+}
+
+std::string CSVWriter:: getStatus(int status){
+    if(status == Status::NEW){
+        return "New";
+    }else if(status == Status::REJECTED){
+        return "Rejected";
+    }else if(status == Status::FILL){
+        return "Fill";
+    }else if(status == Status::PFILL){
+        return "Pfill";
+    }else{
+        return "Invalid Status";
+    }
 }
 
 std::string CSVWriter::transactionTime(std::chrono::system_clock::time_point timePoint)const {

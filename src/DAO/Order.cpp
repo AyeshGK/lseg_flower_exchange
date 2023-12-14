@@ -2,8 +2,6 @@
 
 
 #include "../../include/Order.h"
-#include "Order.h"
-
  
 // Initialize the static member only once
 int Order::orderCount = 0;
@@ -13,18 +11,13 @@ Order::Order(
     const std::string& instrument, 
     int side, 
     int quantity, 
-    double price
-    // ,const std::string& traderId
-    )
+    double price)
 {
-    // Use the setters to apply rules and constraints
     setClientOrderId(clientOrderId);
     setInstrument(instrument);
     setSide(side);
     setQuantity(quantity);
     setPrice(price);
-    // setTraderId(traderId);
-
     setOrderId(increamentAndGetOrderCount());
 }
 
@@ -33,9 +26,7 @@ Order::Order(
     const std::string &instrument, 
     const std::string &side, 
     const std::string &quantity, 
-    const std::string &price
-    // ,const std::string &traderId
-    )
+    const std::string &price)
 {
     // Use the setters to apply rules and constraints
     setClientOrderId(clientOrderId);
@@ -43,14 +34,9 @@ Order::Order(
     setSide(side);
     setQuantity(quantity);
     setPrice(price);
-    // setTraderId(traderId);
     setOrderId(increamentAndGetOrderCount());
 
 }
-// Order::Order()
-// {
-//     setFinal();
-// }
 
 // getters
 std::string Order::getClientOrderId() const {
@@ -72,10 +58,6 @@ int Order::getQuantity() const {
 double Order::getPrice() const {
     return price;
 }
-
-// const std::string& Order::getTraderId() const {
-//     return traderId;
-// }
 
 const std::string& Order::getReason() const {
     return reason;
@@ -100,10 +82,10 @@ void Order::setClientOrderId(const std::string& clientOrderId) {
     // std::cout << "clientOrderId: " << clientOrderId << std::endl;
     // Rule: Client Order ID should be an alphanumeric string with a maximum length of 7 characters.
     if (clientOrderId.empty()|| clientOrderId.length() > 7) {
-        this->clientOrderId = "INVALID";
+        this->clientOrderId = "Invalid Client Id";
         // std:: cerr << "Error: Invalid Order ID." << std::endl;
-        this->reason = "Invalid Order ID";
-        this->status = 1;
+        this->reason = "Invalid Order Id";
+        this->status = Status::REJECTED;
     } else {
         // If all rules are satisfied, set the clientOrderId
         this->clientOrderId = clientOrderId;
@@ -131,7 +113,7 @@ void Order::setInstrument(const std::string& instrument) {
         // Check if the provided instrument is in the list of valid instruments
         if (std::find(validInstruments.begin(), validInstruments.end(), lowercaseInstrument) == validInstruments.end()) {
             this->reason = "Invalid Instrument";
-            this->status = 1;
+            this->status = Status::REJECTED;
         }
     }
     // std::cout << "instrument finished" << std::endl;
@@ -144,7 +126,7 @@ void Order::setSide(const std::string& side) {
     } catch (const std::exception& e) {
         // std::cerr << "Error: Invalid Side." << std::endl;
         this->reason = "Invalid Side";
-        this->status = 1;
+        this->status = Status::REJECTED;
     }
 }
 
@@ -166,7 +148,7 @@ void Order::setQuantity(const std::string& quantity) {
     } catch (const std::exception& e) {
         // std::cerr << "Error: Invalid Quantity." << std::endl;
         this->reason = "Invalid Quantity";
-        this->status = 1;
+        this->status = Status::REJECTED;
     }
 }
 
@@ -191,22 +173,19 @@ void Order::setPrice(const std::string& price) {
     } catch (const std::exception& e) {
         // std::cerr << "Error: Invalid Price." << std::endl;
         this->reason = "Invalid Price";
-        this->status = 1;
+        this->status = Status::REJECTED;
     }
 }
 
 void Order::setPrice(double price) {
-    // std:: cout << "price: " << price << std::endl;
-    // Rule: Price should be a positive double
     this->price = price;
     if(price < 0) {
         throw std::invalid_argument("Price cannot be negative");
     }
-    // std:: cout << "price: " << price << std::endl;
 }
 
 
-void Order::setStatus(int status)
+void Order::setStatus(Status status)
 {
     this->status = status;
 }
@@ -226,25 +205,5 @@ void Order::setTransactionTime(std::chrono::system_clock::time_point transaction
     this->transactionTime = transactionTime;
 }
 
-// Implementation of the greater-than operator (for descending order)
-// bool Order::operator>(const Order& rhs) const {
-//     // For the buy side, higher price is more attractive
-//     std::cout << "> side" << std::endl;
-//     std::cout << "current price :"<<getPrice()<<" , rsh price: "<<rhs.getPrice()<< std::endl;
-//     return rhs.getPrice() > getPrice() ;
-// }
-
-// // Implementation of the less-than operator (for ascending order)
-// bool Order::operator<(const Order& rhs) const {
-//     // For the sell side, lower price is more attractive
-//     std::cout << "< side" << std::endl;
-//     return rhs.getPrice() < getPrice();
-// }
-
-
-// void Order::setFinal()
-// {
-//     this->isFinal = true;
-// }
 
 // Path: src/dao/Order.cpp
