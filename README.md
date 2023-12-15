@@ -20,14 +20,22 @@ The project is organized into the following directories:
 - **build:** Directory where the compiled object files and the final executable are stored.
 
 - **data:** Placeholder directory for storing data related to the Flower Exchange system.
+  - **orders:** Directory for CSV files containing order data.
+  - **results:** Directory for storing result files.
 
 ## Prerequisites
 
 Before building and running the project, make sure you have the following installed on your system:
 
-- **C++ Compiler (g++):** Ensure that a C++ compiler is installed on your system.
+- **C++ Compiler:** Ensure that a C++ compiler is installed on your system. You may use a specific version; for example, g++ version 9.
 
 - **Make:** The project utilizes a Makefile for compilation. Make sure you have the `make` utility installed.
+
+## Data Files
+
+1. Add CSV files containing order data to the `data/orders` directory.
+
+2. Update file paths in `src/main.cpp` to point to the correct data files.
 
 ## Build and Run Instructions
 
@@ -54,7 +62,7 @@ The Flower Exchange project was developed by:
 
 ### Ayesh Vininda
 
-- **LinkedIn:** [Ayesh Vininda](www.linkedin.com/in/ayesh-vininda-1998gk)
+- **LinkedIn:** [Ayesh Vininda](https://www.linkedin.com/in/ayesh-vininda-1998gk)
 - **GitHub:** [AyeshVininda](https://github.com/AyeshGK)
 - **Email:** ayeshgk@gmail.com
 
