@@ -1,12 +1,8 @@
-
-#include "../../include/Book.h"
-
-#include <iostream>
-#include <chrono>      // std::chrono::system_clock
+#include "../../include/model/Book.h"
 
 
-Book::Book(std::shared_ptr<MachineEngineBase> machineEngineBase){
-    this->machineEngineBase = machineEngineBase;
+Book::Book(std::shared_ptr<MatchingEngineBase> matchingEnigneBase){
+    this->machineEngineBase = matchingEnigneBase;
 }
 
 void Book::orderBook(const OrderPtr& orderPtr,OrderBuffer& writerBuffer){

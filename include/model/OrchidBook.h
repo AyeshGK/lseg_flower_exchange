@@ -6,7 +6,7 @@
 class OrchidBook : public Book {
 public:
     // Constructor
-    OrchidBook(std::shared_ptr<MachineEngineBase> machineEngineBase) : Book(machineEngineBase) {}
+    OrchidBook(std::shared_ptr<MatchingEngineBase> matchingEngineeringBase) : Book(matchingEngineeringBase) {}
 
     // Add any additional member functions or variables here
 };

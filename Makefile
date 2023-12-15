@@ -5,11 +5,15 @@ BUILD_DIR = build
 DATA_DIR = data
 
 # Compiler flags for C++
-CXXFLAGS = -std=c++11 -Wall
-
+CXXFLAGS = -std=c++17 -Wall
 # Source files
-SRCS = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/dao/*.cpp) $(wildcard $(SRC_DIR)/service/*.cpp) $(wildcard $(SRC_DIR)/model/*.cpp) $(wildcard $(SRC_DIR)/factory/*.cpp)
-
+SRCS = $(wildcard $(SRC_DIR)/*.cpp) \
+       $(wildcard $(SRC_DIR)/dao/*.cpp) \
+       $(wildcard $(SRC_DIR)/service/*.cpp) \
+       $(wildcard $(SRC_DIR)/model/*.cpp) \
+       $(wildcard $(SRC_DIR)/factory/*.cpp) \
+       $(wildcard $(SRC_DIR)/common/*.cpp)
+	   
 # Header files
 INCLUDES = -I$(INCLUDE_DIR)
 

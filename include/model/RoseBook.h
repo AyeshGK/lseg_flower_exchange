@@ -6,8 +6,7 @@
 class RoseBook : public Book {
 public:
     // Constructor
-    // RoseBook(MachineEngineBase* machineEngineBase) : Book(machineEngineBase) {}
-    RoseBook(std::shared_ptr<MachineEngineBase> machineEngineBase) : Book(machineEngineBase) {}
+    RoseBook(std::shared_ptr<MatchingEngineBase> matchingEngineeringBase) : Book(matchingEngineeringBase) {}
 
     // Add any additional member functions or variables here
 };

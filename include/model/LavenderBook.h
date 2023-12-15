@@ -6,7 +6,7 @@
 class LavenderBook : public Book {
 public:
     // Constructor
-    LavenderBook(std::shared_ptr<MachineEngineBase> machineEngineBase) : Book(machineEngineBase) {}
+    LavenderBook(std::shared_ptr<MatchingEngineBase> matchingEngineBase) : Book(matchingEngineBase) {}
 
     // Add any additional member functions or variables here
 };

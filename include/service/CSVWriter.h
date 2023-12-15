@@ -1,11 +1,9 @@
 #ifndef CSV_WRITER_H
 #define CSV_WRITER_H
 
-#include <vector>
-#include "Order.h"
-#include <memory>
-#include <vector>
-#include "OrderBuffer.h"
+
+#include "../dao/Order.h"
+#include "../common/OrderBuffer.h"
 
 
 class CSVWriter {

@@ -1,7 +1,7 @@
 #ifndef COMPARATOR_H
 #define COMPARATOR_H
 
-#include "Order.h"
+#include "../dao/Order.h"
 
 class Comparator {
 public:

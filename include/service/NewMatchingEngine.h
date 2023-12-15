@@ -4,11 +4,11 @@
 #include <vector>
 #include <queue>
 
-#include "MachineEngineBase.h"
-#include "Comparator.h"
+#include "MatchingEngineBase.h"
+#include "../common/Comparator.h"
 
 
-class NewMatchingEngine : public MachineEngineBase {
+class NewMatchingEngine : public MatchingEngineBase {
 public:
     // Constructor
     NewMatchingEngine();
