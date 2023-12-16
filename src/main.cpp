@@ -12,8 +12,8 @@ int main() {
     
 
     // filename
-    std::string reader_file = "/Users/ayesh/workspace/c++ workshop/flower_exchange/data/orders/orders6.csv";
-    std::string writer_file = "/Users/ayesh/workspace/c++ workshop/flower_exchange/data/results/results.csv";
+    std::string reader_file = "data/orders/orders6.csv";
+    std::string writer_file = "data/results/results.csv";
 
     // Create an Exchanger instance with CSV file path
     Exchanger exchanger(readerBuffer, writerBuffer);

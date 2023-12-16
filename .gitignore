@@ -27,3 +27,5 @@ vendor/
 
 # remove DS_Store
 .DS_Store
+
+my_program
