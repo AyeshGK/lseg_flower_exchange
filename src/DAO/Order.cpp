@@ -142,15 +142,15 @@ void Order::setQuantity(const std::string& quantity) {
         int quantityInt = std::stoi(quantity);
         setQuantity(quantityInt);
     } catch (const std::exception& e) {
-        this->reason = "Invalid Quantity";
+        this->reason = "Invalid Size";
         this->status = Status::REJECTED;
     }
 }
 
 void Order::setQuantity(int quantity) {
     this->quantity = quantity;
-    if(quantity < 10 || quantity > 1000 || quantity % 10 != 0) {
-       throw std::invalid_argument("Invalid Quantity");
+    if(quantity < 10 || quantity >= 1000 || quantity % 10 != 0) {
+       throw std::invalid_argument("Invalid Size");
     }
 }
 

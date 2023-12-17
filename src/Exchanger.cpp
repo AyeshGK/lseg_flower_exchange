@@ -27,5 +27,5 @@ void Exchanger::performExchange() {
         flowerBook->orderBook(order,writerBuffer);
 
     }
-    std::cout << "orders completed";
+    std::cout << "orders completed.\n";
 }

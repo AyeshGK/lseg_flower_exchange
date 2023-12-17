@@ -17,13 +17,13 @@ OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 INC_DIRS := -I$(INCLUDE_DIR)
 
 # Executable
-TARGET := my_program
+TARGET := lesg_flower_exchange
 
 .PHONY: all clean
 
-all: $(TARGET)
+all: $(BUILD_DIR)/$(TARGET)
 
-$(TARGET): $(OBJS)
+$(BUILD_DIR)/$(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(INC_DIRS) $^ -o $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
@@ -31,10 +31,10 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(INC_DIRS) -c $< -o $@
 
 clean:
-	rm -rf $(BUILD_DIR) $(TARGET)
+	rm -rf $(BUILD_DIR)
 
-run: $(TARGET)
-	./$(TARGET)
+run: $(BUILD_DIR)/$(TARGET)
+	./$(BUILD_DIR)/$(TARGET)
 
 # Add additional dependencies here if needed
 
